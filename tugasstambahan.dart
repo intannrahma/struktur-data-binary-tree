@@ -1,10 +1,9 @@
 import 'dart:collection';
 import 'dart:io';
 
-class Node<T> {
+class Node<T> { // Class generik untuk merepresentasikan satu simpul (node) di binary tree.
   T nodeValue;
-  Node<T>? left, right;
-
+  Node<T>? left, right; //Punya nilai (nodeValue) dan 2 anak (left dan right).
   Node(this.nodeValue);
 }
 
@@ -12,7 +11,8 @@ class BinaryTree<T> {
   Node<T>? root;
 
   BinaryTree() {
-    root = null;
+    root = null; //titik awal pohon menginisialisasi pohon kosong
+    
   }
 
   // Traversal Preorder
@@ -132,31 +132,41 @@ class BinaryTree<T> {
   }
 
   // 3. Traversal non-rekursif dengan stack
-  void inOrderNonRekursif(Node<T>? node) {
-    List<Node<T>> stack = [];
-    Node<T>? current = node;
+ void inOrderNonRekursif(Node<T>? node) {
+  // Stack untuk menyimpan node yang belum diproses
+  List<Node<T>> stack = [];
+  // Mulai dari node root
+  Node<T>? current = node;
 
-    while (current != null || stack.isNotEmpty) {
-      while (current != null) {
-        stack.add(current);
-        current = current.left;
-      }
-
-      current = stack.removeLast();
-      stdout.write("${current.nodeValue} ");
-      current = current.right;
+  // Selama current tidak null atau masih ada node di stack
+  while (current != null || stack.isNotEmpty) {
+    // Iterasi ke paling kiri dari subtree saat ini
+    while (current != null) {
+      stack.add(current);    // Simpan node ke stack
+      current = current.left; // Pindah ke anak kiri
     }
-    print("");
+
+    // Jika sudah sampai paling kiri, ambil node terakhir dari stack
+    current = stack.removeLast();
+    // Proses node tersebut (tampilkan nilai node)
+    stdout.write("${current.nodeValue} ");
+    // Lanjutkan ke subtree kanan dari node tersebut
+    current = current.right;
   }
+  // Tambah baris baru setelah selesai traversal
+  print("");
+}
+
 
   void preOrderNonRekursif(Node<T>? node) {
     if (node == null) return;
 
-    List<Node<T>> stack = [node];
+    List<Node<T>> stack = []; //menginisialisasi
+    stack.add(node);    
 
     while (stack.isNotEmpty) {
       Node<T> current = stack.removeLast();
-      stdout.write("${current.nodeValue} ");
+      stdout.write("${current.nodeValue} "); // cetak nilai node
 
       if (current.right != null) stack.add(current.right!);
       if (current.left != null) stack.add(current.left!);
@@ -232,15 +242,11 @@ void main() {
   btree.insertData(4);
   btree.insertData(5);
   btree.insertData(6);
-  btree.insertData("a");
-
+  
   print("\nIn Order Traversal Binary Tree:");
   btree.printInOrderFromRoot();
 
   print("\nKedalaman Binary Tree: ${btree.maxDepth(btree.root)}\n");
-
-  btree.insertDataQueue(10);
-  btree.insertDataQueue(20);
 
   btree.insertByTarget(3, 99);
 
@@ -249,6 +255,7 @@ void main() {
 
   print("PreOrder Non Rekursif:");
   btree.preOrderNonRekursif(btree.root);
+  print("non rekursif")
 
   print("PostOrder Non Rekursif:");
   btree.postOrderNonRekursif(btree.root);
